@@ -1,11 +1,24 @@
 # -*- coding:utf-8 -*-
 
 from adsl2 import Adsl
-import urllib, socket, logging, time
-from logging import FileHandler
+import urllib, socket, logging, time, os
+from logging.handlers import TimedRotatingFileHandler
 
 SERVER_URL_REPORT = 'http://adsl2.proxy.op.dajie-inc.com/host/report'
 SERVER_URL_STATUS = 'http://adsl2.proxy.op.dajie-inc.com/list/status'
+
+
+def getlogger(logfile='./log'):
+    log_path = os.path.dirname(logfile)
+    if not os.path.exists(log_path):
+        os.makedirs(log_path)
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    handler = TimedRotatingFileHandler(logfile, 'd')
+    formatter = logging.Formatter('[%(asctime)s] [%(filename)s:%(lineno)d] [%(levelname)s] %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
 
 
 def report(hostname):
@@ -19,11 +32,11 @@ def main():
     try:
         while True:
             ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
-            logging.info(ret1)
+            logger.info(ret1)
             if str(ret1).strip() == 'used':
                 Adsl.reconnect()
                 ret2 = report(hostname=hostname)
-                logging(ret2)
+                logger.info(ret2)
             else:
                 time.sleep(1)
     except KeyboardInterrupt, e:
@@ -31,13 +44,7 @@ def main():
 
 
 if __name__ == '__main__':
-    FILE_NAME = 'adsl-' + time.strftime('%Y-%m-%d', time.localtime()) + '.log'
-    LOG_FILE = '/var/log/' + FILE_NAME
-
-    logging.basicConfig(level=logging.DEBUG,
-                        format='[%(asctime)s] [%(filename)s:%(lineno)d] [%(levelname)s] %(message)s',
-                        filemode='a',
-                        filename=LOG_FILE)
-    logger = logging.getLogger(__name__)
+    LOG_FILE = '/var/log/adsl.log'
+    logger = getlogger(LOG_FILE)
 
     main()
