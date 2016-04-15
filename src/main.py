@@ -72,21 +72,9 @@ def main():
 
             ret2 = report(hostname=hostname)
             logger.info('report self status:' + ret2)
-        # elif '404' in ret1:
-        #     ip_adsl = get_local_ip('ppp0')
-        #     print 'ip_adsl: ' + ip_adsl
-        #
-        #     changeupstream(ip_adsl)
-        #     logger.info('change tinyproxy upstream:' + ip_adsl)
-        #
-        #     reloadservice('tinyproxy')
-        #     logger.info('reload tinyproxy service')
-        #
-        #     ret2 = report(hostname=hostname)
-        #     logger.info('report self status:' + ret2)
         else:
             ret2 = report(hostname=hostname)
-            logger.info('report self status:' + ret2)
+            # logger.info('report self status:' + ret2)
             time.sleep(1)
     # except Exception, e:
     #     logging.info(str(e))
