@@ -57,7 +57,7 @@ def main():
         try:
             ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
             logger.info('get self status:' + ret1)
-            if str(ret1).strip() == 'used':
+            if 'used' in ret1:
                 logger.info('start adsl reconnect')
                 adsl.reconnect()
                 ip_adsl = get_local_ip('ppp0')
@@ -71,7 +71,7 @@ def main():
 
                 ret2 = report(hostname=hostname)
                 logger.info('report self status:' + ret2)
-            elif str(ret1).strip() == '404':
+            elif '404' in  ret1:
                 ip_adsl = get_local_ip('ppp0')
 
                 changeupstream(ip_adsl)
