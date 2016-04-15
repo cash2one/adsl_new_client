@@ -56,17 +56,21 @@ def main():
     try:
         while True:
             ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
-            logger.info(ret1)
+            logger.info('get self status:' + ret1)
             if str(ret1).strip() == 'used' or str(ret1).strip() == '404':
                 ip_adsl = get_local_ip('ppp0')
                 adsl.reconnect()
+                logger.info('adsl reconnect')
+
                 changeupstream(ip_adsl)
                 reloadservice('tinyproxy')
+                logger.info('change tinyproxy upstream:' + ip_adsl)
+
                 ret2 = report(hostname=hostname)
-                logger.info(ret2)
+                logger.info('report self status:' + ret2)
             else:
                 ret2 = report(hostname=hostname)
-                logger.info(ret2)
+                logger.info('report self status:' + ret2)
                 time.sleep(1)
     except Exception, e:
         logging.info(str(e))
