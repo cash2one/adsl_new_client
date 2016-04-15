@@ -57,8 +57,8 @@ def main():
     # try:
     while True:
         ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
-        logger.info('get self status:' + ret1)
         if 'used' in ret1 or '404' in ret1:
+            logger.info('get self status:' + ret1)
             logger.info('start adsl reconnect')
             adsl.reconnect()
             ip_adsl = get_local_ip('ppp0')
