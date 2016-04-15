@@ -54,42 +54,42 @@ def main():
     hostname = socket.gethostname()
     adsl = Adsl()
 
-    try:
-        while True:
-            ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
-            logger.info('get self status:' + ret1)
-            if 'used' in ret1:
-                logger.info('start adsl reconnect')
-                adsl.reconnect()
-                ip_adsl = get_local_ip('ppp0')
-                logger.info('end adsl reconnect')
+    # try:
+    while True:
+        ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
+        logger.info('get self status:' + ret1)
+        if 'used' in ret1:
+            logger.info('start adsl reconnect')
+            adsl.reconnect()
+            ip_adsl = get_local_ip('ppp0')
+            logger.info('end adsl reconnect')
 
-                changeupstream(ip_adsl)
-                logger.info('change tinyproxy upstream:' + ip_adsl)
+            changeupstream(ip_adsl)
+            logger.info('change tinyproxy upstream:' + ip_adsl)
 
-                reloadservice('tinyproxy')
-                logger.info('reload tinyproxy service')
+            reloadservice('tinyproxy')
+            logger.info('reload tinyproxy service')
 
-                ret2 = report(hostname=hostname)
-                logger.info('report self status:' + ret2)
-            elif '404' in ret1:
-                ip_adsl = get_local_ip('ppp0')
-                print 'ip_adsl: ' + ip_adsl
+            ret2 = report(hostname=hostname)
+            logger.info('report self status:' + ret2)
+        elif '404' in ret1:
+            ip_adsl = get_local_ip('ppp0')
+            print 'ip_adsl: ' + ip_adsl
 
-                changeupstream(ip_adsl)
-                logger.info('change tinyproxy upstream:' + ip_adsl)
+            changeupstream(ip_adsl)
+            logger.info('change tinyproxy upstream:' + ip_adsl)
 
-                reloadservice('tinyproxy')
-                logger.info('reload tinyproxy service')
+            reloadservice('tinyproxy')
+            logger.info('reload tinyproxy service')
 
-                ret2 = report(hostname=hostname)
-                logger.info('report self status:' + ret2)
-            else:
-                ret2 = report(hostname=hostname)
-                logger.info('report self status:' + ret2)
-                time.sleep(1)
-    except Exception, e:
-        logging.info(str(e))
+            ret2 = report(hostname=hostname)
+            logger.info('report self status:' + ret2)
+        else:
+            ret2 = report(hostname=hostname)
+            logger.info('report self status:' + ret2)
+            time.sleep(1)
+    # except Exception, e:
+    #     logging.info(str(e))
 
 
 if __name__ == '__main__':
