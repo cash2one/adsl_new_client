@@ -58,7 +58,7 @@ def main():
     while True:
         ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
         logger.info('get self status:' + ret1)
-        if 'used' in ret1:
+        if 'used' in ret1 or '404' in ret1:
             logger.info('start adsl reconnect')
             adsl.reconnect()
             ip_adsl = get_local_ip('ppp0')
@@ -72,18 +72,18 @@ def main():
 
             ret2 = report(hostname=hostname)
             logger.info('report self status:' + ret2)
-        elif '404' in ret1:
-            ip_adsl = get_local_ip('ppp0')
-            print 'ip_adsl: ' + ip_adsl
-
-            changeupstream(ip_adsl)
-            logger.info('change tinyproxy upstream:' + ip_adsl)
-
-            reloadservice('tinyproxy')
-            logger.info('reload tinyproxy service')
-
-            ret2 = report(hostname=hostname)
-            logger.info('report self status:' + ret2)
+        # elif '404' in ret1:
+        #     ip_adsl = get_local_ip('ppp0')
+        #     print 'ip_adsl: ' + ip_adsl
+        #
+        #     changeupstream(ip_adsl)
+        #     logger.info('change tinyproxy upstream:' + ip_adsl)
+        #
+        #     reloadservice('tinyproxy')
+        #     logger.info('reload tinyproxy service')
+        #
+        #     ret2 = report(hostname=hostname)
+        #     logger.info('report self status:' + ret2)
         else:
             ret2 = report(hostname=hostname)
             logger.info('report self status:' + ret2)
