@@ -4,8 +4,8 @@ from adsl2 import Adsl
 import urllib, socket, logging, time, os
 from logging.handlers import TimedRotatingFileHandler
 
-SERVER_URL_REPORT = 'http://adsl2.proxy.op.dajie-inc.com/host/report'
-SERVER_URL_STATUS = 'http://adsl2.proxy.op.dajie-inc.com/list/status'
+SERVER_URL_REPORT = 'http://adsl2.proxy.op.dajie-inc.com/adsl/host/report'
+SERVER_URL_STATUS = 'http://adsl2.proxy.op.dajie-inc.com/adsl/status'
 
 
 def getlogger(logfile='./log'):
