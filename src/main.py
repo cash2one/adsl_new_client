@@ -73,6 +73,7 @@ def main():
                 logger.info('report self status:' + ret2)
             elif '404' in  ret1:
                 ip_adsl = get_local_ip('ppp0')
+                print 'ip_adsl: ' + ip_adsl
 
                 changeupstream(ip_adsl)
                 logger.info('change tinyproxy upstream:' + ip_adsl)
