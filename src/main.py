@@ -53,8 +53,9 @@ def reloadservice(servicename='tinyproxy'):
 def main():
     hostname = socket.gethostname()
     adsl = Adsl()
-    while True:
-        try:
+
+    try:
+        while True:
             ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
             logger.info('get self status:' + ret1)
             if 'used' in ret1:
@@ -87,8 +88,8 @@ def main():
                 ret2 = report(hostname=hostname)
                 logger.info('report self status:' + ret2)
                 time.sleep(1)
-        except Exception, e:
-            logging.info(str(e))
+    except Exception, e:
+        logging.info(str(e))
 
 
 if __name__ == '__main__':
