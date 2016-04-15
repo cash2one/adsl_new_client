@@ -27,6 +27,27 @@ def report(hostname):
     return ret
 
 
+def get_local_ip(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    inet = fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', ifname[:15]))
+    ret = socket.inet_ntoa(inet[20:24])
+    return ret
+
+
+def changeupstream(ip_ppp):
+    with open("tinyproxy.conf") as f:
+        content = f.read()
+
+    newcontent = content.replace("IP_PPP", ip_ppp)
+    with open("/etc/tinyproxy/tinyproxy.conf", 'w') as f:
+        f.write(newcontent)
+
+
+def reloadservice(servicename='tinyproxy'):
+    cmdstr = "service " + servicename + " reload"
+    os.system(cmdstr)
+
+
 def main():
     hostname = socket.gethostname()
     try:
@@ -34,7 +55,10 @@ def main():
             ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
             logger.info(ret1)
             if str(ret1).strip() == 'used':
+                ip_adsl = get_local_ip('ppp0')
                 Adsl.reconnect()
+                changeupstream(ip_adsl)
+                reloadservice('tinyproxy')
                 ret2 = report(hostname=hostname)
                 logger.info(ret2)
             else:
