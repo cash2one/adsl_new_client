@@ -52,13 +52,14 @@ def reloadservice(servicename='tinyproxy'):
 
 def main():
     hostname = socket.gethostname()
+    adsl = Adsl()
     try:
         while True:
             ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
             logger.info(ret1)
             if str(ret1).strip() == 'used' or str(ret1).strip() == '404':
                 ip_adsl = get_local_ip('ppp0')
-                Adsl.reconnect()
+                adsl.reconnect()
                 changeupstream(ip_adsl)
                 reloadservice('tinyproxy')
                 ret2 = report(hostname=hostname)
@@ -67,7 +68,7 @@ def main():
                 ret2 = report(hostname=hostname)
                 logger.info(ret2)
                 time.sleep(1)
-    except KeyboardInterrupt, e:
+    except Exception, e:
         logging.info(str(e))
 
 
