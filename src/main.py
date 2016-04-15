@@ -52,10 +52,9 @@ def main():
     hostname = socket.gethostname()
     try:
         while True:
-            data = urllib.urlencode({'show':hostname})
-            ret1 = urllib.urlopen(SERVER_URL_STATUS,data).read()
+            ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
             logger.info(ret1)
-            if str(ret1).strip() == 'used':
+            if str(ret1).strip() == 'used' or str(ret1).strip() == '404':
                 ip_adsl = get_local_ip('ppp0')
                 Adsl.reconnect()
                 changeupstream(ip_adsl)
@@ -63,6 +62,8 @@ def main():
                 ret2 = report(hostname=hostname)
                 logger.info(ret2)
             else:
+                ret2 = report(hostname=hostname)
+                logger.info(ret2)
                 time.sleep(1)
     except KeyboardInterrupt, e:
         logging.info(str(e))
