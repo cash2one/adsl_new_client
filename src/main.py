@@ -58,9 +58,10 @@ def main():
             ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
             logger.info('get self status:' + ret1)
             if str(ret1).strip() == 'used' or str(ret1).strip() == '404':
-                ip_adsl = get_local_ip('ppp0')
+                logger.info('start adsl reconnect')
                 adsl.reconnect()
-                logger.info('adsl reconnect')
+                ip_adsl = get_local_ip('ppp0')
+                logger.info('end adsl reconnect')
 
                 changeupstream(ip_adsl)
                 reloadservice('tinyproxy')
