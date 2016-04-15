@@ -3,6 +3,9 @@
 from adsl2 import Adsl
 import urllib, socket, logging, time, os
 from logging.handlers import TimedRotatingFileHandler
+import logging
+import struct
+import fcntl
 
 SERVER_URL_REPORT = 'http://adsl2.proxy.op.dajie-inc.com/adsl/host/report'
 SERVER_URL_STATUS = 'http://adsl2.proxy.op.dajie-inc.com/adsl/status'
