@@ -52,7 +52,8 @@ def main():
     hostname = socket.gethostname()
     try:
         while True:
-            ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
+            data = urllib.urlencode({'show':hostname})
+            ret1 = urllib.urlopen(SERVER_URL_STATUS,data).read()
             logger.info(ret1)
             if str(ret1).strip() == 'used':
                 ip_adsl = get_local_ip('ppp0')
