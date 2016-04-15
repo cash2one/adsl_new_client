@@ -3,7 +3,6 @@
 from adsl2 import Adsl
 import urllib, socket, logging, time, os
 from logging.handlers import TimedRotatingFileHandler
-import logging
 import struct
 import fcntl
 
