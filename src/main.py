@@ -37,9 +37,9 @@ def get_local_ip(ifname):
 
 
 def changeupstream(ip_ppp):
-    fpath = os.path.dirname(os.path.abspath(__file__)) + '/tinyproxy.conf'
+    fpath = os.path.dirname(os.path.abspath(__file__))
 
-    with open(fpath) as f:
+    with open(os.path.join(fpath, 'tinyproxy.conf')) as f:
         content = f.read()
 
     newcontent = content.replace("IP_PPP", ip_ppp)
@@ -78,8 +78,8 @@ def main():
             ret2 = report(hostname=hostname)
             # logger.info('report self status:' + ret2)
             time.sleep(1)
-    # except Exception, e:
-    #     logging.info(str(e))
+            # except Exception, e:
+            #     logging.info(str(e))
 
 
 if __name__ == '__main__':
