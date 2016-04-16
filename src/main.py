@@ -37,7 +37,7 @@ def get_local_ip(ifname):
 
 
 def changeupstream(ip_ppp):
-    fpath = os.path.dirname(__file__) + '/tinyproxy.conf'
+    fpath = os.path.dirname(os.path.abspath(__file__)) + '/tinyproxy.conf'
 
     with open(fpath) as f:
         content = f.read()
