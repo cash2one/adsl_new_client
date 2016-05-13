@@ -37,9 +37,7 @@ def get_local_ip(ifname):
 
 
 def changeupstream(ip_ppp):
-    fpath = os.path.dirname(os.path.abspath(__file__))
-
-    with open(os.path.join(fpath, 'tinyproxy.conf')) as f:
+    with open("tinyproxy.conf") as f:
         content = f.read()
 
     newcontent = content.replace("IP_PPP", ip_ppp)
@@ -48,7 +46,7 @@ def changeupstream(ip_ppp):
 
 
 def reloadservice(servicename='tinyproxy'):
-    cmdstr = "service " + servicename + " reload"
+    cmdstr = "systemctl reload " + servicename
     os.system(cmdstr)
 
 
