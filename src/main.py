@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from adsl2 import Adsl
-import urllib, socket, logging, time, os
+import urllib, socket, logging, time, os, urllib2
 from logging.handlers import TimedRotatingFileHandler
 import struct
 import fcntl
@@ -54,9 +54,28 @@ def main():
     hostname = socket.gethostname()
     adsl = Adsl()
 
+    #启动时重新拨号
+    logger.info('programe start and start adsl reconnect')
+    adsl.reconnect()
+    ip_adsl = get_local_ip('ppp0')
+    logger.info('end adsl reconnect')
+
+    changeupstream(ip_adsl)
+    logger.info('change tinyproxy upstream:' + ip_adsl)
+
+    reloadservice('tinyproxy')
+    logger.info('reload tinyproxy service')
+
+    ret2 = report(hostname=hostname)
+    logger.info('report self status:' + ret2)
+
     # try:
     while True:
-        ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
+        url = SERVER_URL_STATUS + '?show=' + hostname
+        headers = {'Host':'adsl2.proxy.op.dajie-inc.com'}
+        req = urllib2.Request(url=url,headers=headers)
+        ret1 = urllib2.urlopen(req).read()
+        # ret1 = urllib.urlopen(SERVER_URL_STATUS + '?show=' + hostname).read()
         if 'used' in ret1 or '404' in ret1:
             logger.info('get self status:' + ret1)
             logger.info('start adsl reconnect')
